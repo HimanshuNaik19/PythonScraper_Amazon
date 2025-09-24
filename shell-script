@@ -1,0 +1,9 @@
+Invoke-WebRequest -Uri "https://www.amfiindia.com/spages/NAVAll.txt" -OutFile "NAVAll.txt"
+Get-Content "NAVAll.txt" |
+    ForEach-Object {
+        $cols = $_ -split ';'
+        if ($cols.Count -ge 5 -and $cols[3] -ne "Scheme Name" -and $cols[3] -ne "") {
+            "$($cols[3])`t$($cols[4])"
+        }
+    } | Out-File "schemes.tsv" -Encoding utf8
+Write-Output "✅ Extracted Scheme Name and NAV into schemes.tsv"
